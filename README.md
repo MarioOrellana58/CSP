@@ -1,0 +1,1 @@
+Implementation of constraint satisfaction problem algorithm, also upgrades of this algorithm like Arc Consistency (AC-3) and some examples of how to use the algorithm
