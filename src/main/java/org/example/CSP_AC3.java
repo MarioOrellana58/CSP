@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public class CSP <V, D>{
+public class CSP_AC3 <V, D>{
 
     //Partes del CSP, variables, dominio y restricciones
     private List<V> variables;
@@ -15,7 +16,7 @@ public class CSP <V, D>{
 
     //1er paso. se reciben las variables y dominios, se asignan y recorro las variables para crear en blanco las restricciones
 
-    public CSP (List<V> variables, Map<V, List<D>> domains){
+    public CSP_AC3 (List<V> variables, Map<V, List<D>> domains){
         this.variables = variables;
         this.domains = domains;
 
@@ -56,10 +57,10 @@ public class CSP <V, D>{
     }
 
     public Map<V, D> backtrack(){
-        return backtrack(new HashMap<>());
+        return backtrack(new HashMap<>(), new HashMap<>(domains));
     }
 
-    public Map<V, D> backtrack(Map<V, D> assignment){
+    public Map<V, D> backtrack(Map<V, D> assignment, Map<V, List<D>> domainsDict){
         //if assignment is complete, línea 1
         if (variables.size() == assignment.size()){
             return  assignment;
@@ -70,7 +71,7 @@ public class CSP <V, D>{
                 .filter(v -> !assignment.containsKey(v))
                 .findFirst().get();
 
-        for (D value: domains.get(unassigned)) {//línea 3
+        for (D value: domainsDict.get(unassigned)) {//línea 3
 
             System.out.println("Variable: " + unassigned + " valor: " + value);
 
@@ -84,7 +85,11 @@ public class CSP <V, D>{
             //3- Verificar la consistencia de la asignación
 
             if (consistent(unassigned, localAssignment)){
-                Map<V, D> result = backtrack(localAssignment);
+                //si la asignación es consistente entonces hacer que
+                //los arcos sean consistentes
+                Map<V, List<D>> localdomainsDict = new HashMap<>(AC3(domainsDict, unassigned, value));
+
+                Map<V, D> result = backtrack(localAssignment, localdomainsDict);
 
                 if (result != null){
                     return result;
@@ -94,5 +99,38 @@ public class CSP <V, D>{
         return null;
     }
 
+    public Map<V, List<D>> AC3 (Map<V, List<D>> domainsDict, V variable, D value){
+
+        Map<V, List<D>> tempDomains = new HashMap<>(domainsDict);
+        for (Constraint<V, D> constraint:this.constraints.get(variable)) {
+            for (V constraintVariable: constraint.variables) {
+                if (!variable.equals(constraintVariable)){
+
+                    var tempDomain = domainsDict.get(constraintVariable).stream()
+                            .filter(s -> !s.equals(value))
+                            .collect(Collectors.toList());
+
+                    tempDomains.replace(constraintVariable, tempDomain);
+                }
+                else{
+                    var tempDomain = domainsDict.get(constraintVariable).stream()
+                            .filter(s -> s.equals(value))
+                            .collect(Collectors.toList());
+
+                    tempDomains.replace(constraintVariable, tempDomain);
+                }
+            }
+        }
+
+
+
+
+
+        return tempDomains;
+    }
+
+
+
 
 }
+

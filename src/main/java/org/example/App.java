@@ -24,19 +24,19 @@ public class App
         }
 
         //RESTRICCIONES
-        CSP<String,String> problema = new CSP<>(variables, domains);
-        problema.addConstraint(new AustraliaColoringConstraint("Western Australia", "Northern Territory"));
-        problema.addConstraint(new AustraliaColoringConstraint("Western Australia", "South Australia"));
-        problema.addConstraint(new AustraliaColoringConstraint("Northern Territory", "South Australia"));
-        problema.addConstraint(new AustraliaColoringConstraint("Northern Territory", "Queensland"));
-        problema.addConstraint(new AustraliaColoringConstraint("South Australia", "Queensland"));
-        problema.addConstraint(new AustraliaColoringConstraint("New South Wales", "Queensland"));
-        problema.addConstraint(new AustraliaColoringConstraint("New South Wales", "South Australia"));
-        problema.addConstraint(new AustraliaColoringConstraint("Victoria", "South Australia"));
-        problema.addConstraint(new AustraliaColoringConstraint("New South Wales", "Victoria"));
-        problema.addConstraint(new AustraliaColoringConstraint("Tasmania", "Victoria"));
+        CSP_AC3<String,String> problem = new CSP_AC3<>(variables, domains);
+        problem.addConstraint(new AustraliaColoringConstraint("Western Australia", "Northern Territory"));
+        problem.addConstraint(new AustraliaColoringConstraint("Western Australia", "South Australia"));
+        problem.addConstraint(new AustraliaColoringConstraint("Northern Territory", "South Australia"));
+        problem.addConstraint(new AustraliaColoringConstraint("Northern Territory", "Queensland"));
+        problem.addConstraint(new AustraliaColoringConstraint("South Australia", "Queensland"));
+        problem.addConstraint(new AustraliaColoringConstraint("New South Wales", "Queensland"));
+        problem.addConstraint(new AustraliaColoringConstraint("New South Wales", "South Australia"));
+        problem.addConstraint(new AustraliaColoringConstraint("Victoria", "South Australia"));
+        problem.addConstraint(new AustraliaColoringConstraint("New South Wales", "Victoria"));
+        problem.addConstraint(new AustraliaColoringConstraint("Tasmania", "Victoria"));
 
-        var solution = problema.backtrack();
+        var solution = problem.backtrack();
         System.out.println(solution);
     }
 }
