@@ -121,11 +121,6 @@ public class CSP_AC3 <V, D>{
                 }
             }
         }
-
-
-
-
-
         return tempDomains;
     }
 
